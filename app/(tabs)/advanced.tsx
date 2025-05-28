@@ -1,3 +1,4 @@
+import SuperAdvancedDemo from '@/components/SuperAdvancedDemo';
 import UIDemo from '@/components/UIDemo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -13,17 +14,17 @@ import * as SQLite from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  Alert,
-  Image,
-  Modal,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Alert,
+    Image,
+    Modal,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
@@ -39,6 +40,7 @@ export default function AdvancedScreen() {
   const [dbData, setDbData] = useState<any[]>([]);
   const [secureData, setSecureData] = useState('');
   const [showUIDemo, setShowUIDemo] = useState(false);
+  const [showSuperAdvanced, setShowSuperAdvanced] = useState(false);
 
   // 初始化数据库
   useEffect(() => {
@@ -464,6 +466,12 @@ export default function AdvancedScreen() {
       onPress: () => setShowUIDemo(true),
       color: '#8b5cf6',
     },
+    {
+      title: '🚀 超级高级功能',
+      description: '视频播放、网络检测、图片预览、系统集成',
+      onPress: () => setShowSuperAdvanced(true),
+      color: '#f59e0b',
+    },
   ];
 
   return (
@@ -598,6 +606,25 @@ export default function AdvancedScreen() {
             </TouchableOpacity>
           </View>
           <UIDemo />
+        </View>
+      </Modal>
+
+      {/* 超级高级功能模态框 */}
+      <Modal
+        visible={showSuperAdvanced}
+        animationType="slide"
+        presentationStyle="fullScreen"
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalHeader}>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setShowSuperAdvanced(false)}
+            >
+              <Text style={styles.closeButtonText}>关闭</Text>
+            </TouchableOpacity>
+          </View>
+          <SuperAdvancedDemo />
         </View>
       </Modal>
     </View>
