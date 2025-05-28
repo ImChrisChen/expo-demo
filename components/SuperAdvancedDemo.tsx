@@ -1,12 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import NetInfo from '@react-native-community/netinfo';
 import * as Application from 'expo-application';
-import { ResizeMode, Video } from 'expo-av';
 import * as Brightness from 'expo-brightness';
 import * as FileSystem from 'expo-file-system';
 import * as IntentLauncher from 'expo-intent-launcher';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as MediaLibrary from 'expo-media-library';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import * as WebBrowser from 'expo-web-browser';
 import React, { useEffect, useState } from 'react';
 import {
@@ -47,7 +47,6 @@ export default function SuperAdvancedDemo() {
   const [networkInfo, setNetworkInfo] = useState<NetworkInfo | null>(null);
   const [brightness, setBrightness] = useState(0.5);
   const [installedApps, setInstalledApps] = useState<AppInfo[]>([]);
-  const [videoStatus, setVideoStatus] = useState({});
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [imageViewVisible, setImageViewVisible] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -116,7 +115,6 @@ export default function SuperAdvancedDemo() {
         nativeApplicationVersion: Application.nativeApplicationVersion,
         nativeBuildVersion: Application.nativeBuildVersion,
         installationId: await Application.getInstallationTimeAsync(),
-        applicationReleaseType: Application.ApplicationReleaseType,
       };
       setSystemInfo(appInfo);
     } catch (error) {
@@ -175,22 +173,27 @@ export default function SuperAdvancedDemo() {
   /**
    * 1. 视频播放功能
    */
-  const VideoPlayerDemo = () => (
-    <View style={styles.videoContainer}>
-      <Text style={styles.sectionTitle}>🎬 视频播放器</Text>
-      <Video
-        source={{ uri: sampleVideoUrl }}
-        style={styles.video}
-        useNativeControls
-        resizeMode={ResizeMode.CONTAIN}
-        isLooping
-        onPlaybackStatusUpdate={status => setVideoStatus(status)}
-      />
-      <Text style={styles.videoInfo}>
-        演示视频: Big Buck Bunny
-      </Text>
-    </View>
-  );
+  const VideoPlayerDemo = () => {
+    const player = useVideoPlayer(sampleVideoUrl, player => {
+      player.loop = true;
+      player.play();
+    });
+
+    return (
+      <View style={styles.videoContainer}>
+        <Text style={styles.sectionTitle}>🎬 视频播放器</Text>
+        <VideoView
+          style={styles.video}
+          player={player}
+          allowsFullscreen
+          allowsPictureInPicture
+        />
+        <Text style={styles.videoInfo}>
+          演示视频: Big Buck Bunny
+        </Text>
+      </View>
+    );
+  };
 
   /**
    * 2. 网络检测功能
@@ -735,10 +738,6 @@ export default function SuperAdvancedDemo() {
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Bundle ID</Text>
             <Text style={styles.infoValue}>{systemInfo.applicationId}</Text>
-          </View>
-          <View style={styles.infoItem}>
-            <Text style={styles.infoLabel}>应用类型</Text>
-            <Text style={styles.infoValue}>{systemInfo.applicationReleaseType}</Text>
           </View>
         </View>
       </Animatable.View>

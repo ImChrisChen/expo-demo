@@ -14,17 +14,17 @@ import * as SQLite from 'expo-sqlite';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Alert,
-    Image,
-    Modal,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  Image,
+  Modal,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 
@@ -206,6 +206,7 @@ export default function AdvancedScreen() {
         });
       }
     } catch (error) {
+      console.error('分享失败: ', error);
       Alert.alert('分享失败', '无法分享内容');
     }
   };
