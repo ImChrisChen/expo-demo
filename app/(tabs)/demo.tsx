@@ -1,5 +1,4 @@
 import CameraDemo from '@/components/CameraDemo';
-import { Audio } from 'expo-av';
 import * as Clipboard from 'expo-clipboard';
 import Constants from 'expo-constants';
 import * as Device from 'expo-device';
@@ -30,20 +29,12 @@ export default function DemoScreen() {
   const [deviceInfo, setDeviceInfo] = useState<any>(null);
   const [location, setLocation] = useState<Location.LocationObject | null>(null);
   const [accelerometerData, setAccelerometerData] = useState<any>(null);
-  const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [showCamera, setShowCamera] = useState(false);
 
   // 组件挂载时初始化设备信息
   useEffect(() => {
     loadDeviceInfo();
     startAccelerometer();
-    
-    // 清理函数：组件卸载时清理资源
-    return () => {
-      if (sound) {
-        sound.unloadAsync();
-      }
-    };
   }, []);
 
   /**
@@ -65,6 +56,7 @@ export default function DemoScreen() {
         isDevice: Device.isDevice,               // 是否为真实设备
       };
       setDeviceInfo(info);
+      console.log('设备信息:', info);
     } catch (error: any) {
       console.error('获取设备信息失败:', error);
     }
